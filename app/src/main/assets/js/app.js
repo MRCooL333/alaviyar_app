@@ -5,7 +5,7 @@
    ========================================================================== */
 const IMG = { mascot: "img/mascot.webp", badge: "img/badge.png" };
 const SUPPORT_URL = "https://ble.ir/MRCooL_33";
-const APP_VERSION = "1.0.0";
+const APP_VERSION = "2.0.0";
 
 const ICON = {
   home: '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/>',
@@ -21,6 +21,26 @@ const ICON = {
   clip: '<path d="M20 12.5l-7.5 7.5a5 5 0 0 1-7-7l8-8a3.4 3.4 0 0 1 5 5l-8 8a1.8 1.8 0 0 1-2.5-2.5l7-7"/>',
   down: '<path d="M12 4v11"/><path d="M7.5 11l4.5 4.5 4.5-4.5"/><path d="M5 20h14"/>',
   help: '<circle cx="12" cy="12" r="9"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.6-2.4 2-2.4 3.6"/><path d="M12 17.2h.01"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4L6 18M18 6l1.4-1.4"/>',
+  moon: '<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>',
+  phone: '<rect x="7" y="2.5" width="10" height="19" rx="2.6"/><path d="M11 18.5h2"/>',
+  check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  xmark: '<path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/>',
+  minus: '<path d="M6 12h12"/>',
+  medal: '<circle cx="12" cy="9" r="5.5"/><path d="M8.6 13.4L7 21l5-2.5 5 2.5-1.6-7.6"/>',
+  users: '<circle cx="9" cy="8.5" r="3.2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><circle cx="17.5" cy="9.5" r="2.5"/><path d="M17.5 14.5c2.4 0 4.5 1.6 4.5 4.5"/>',
+  cal: '<rect x="4" y="5" width="16" height="15.5" rx="2.5"/><path d="M4 10h16M8.5 3v4M15.5 3v4"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.5-6 7.5-6s6.9 2 7.5 6"/>',
+  school: '<path d="M3 9l9-5 9 5-9 5z"/><path d="M7 11.5V16c0 1.2 2.2 2.5 5 2.5s5-1.3 5-2.5v-4.5"/><path d="M21 9v5"/>',
+  pencil: '<path d="M4 20l1-4L16.5 4.5a2.1 2.1 0 0 1 3 3L8 19z"/><path d="M14.5 6.5l3 3"/>',
+  sprout: '<path d="M12 21v-9"/><path d="M12 12C12 8 9 5.5 4.5 5.5 4.5 10 7 12 12 12z"/><path d="M12 14.5c0-3 2.2-5 6-5 0 3.5-2 5-6 5z"/>',
+  info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5.5"/><path d="M12 7.7h.01"/>',
+  tup: '<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
+  tdown: '<path d="M3 7l6 6 4-4 8 8"/><path d="M15 17h6v-6"/>',
+  equal: '<path d="M5 9h14M5 15h14"/>',
+  aup: '<path d="M12 19V5M6 11l6-6 6 6"/>',
+  adown: '<path d="M12 5v14M18 13l-6 6-6-6"/>',
+  pin: '<path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/>',
 };
 const ic = (n, cls = "") => `<svg class="i ${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICON[n]}</svg>`;
 
@@ -124,7 +144,7 @@ let frameReady = false, pendingDir = null, prevLoading = false, backFn = null, r
 function ensureFrame() {
   if (frameReady && document.getElementById("topbar")) return;
   $app.innerHTML = `<header class="topbar" id="topbar"></header><main id="main" tabindex="-1"></main>
-    <nav class="tabs" id="tabs" aria-label="بخش‌ها">${TABS.map(([k, l, i]) => `<button data-tab="${k}">${ic(i)}<span>${l}</span></button>`).join("")}</nav>`;
+    <nav class="tabs" id="tabs" aria-label="بخش‌ها">${TABS.map(([k, l, i]) => `<button data-tab="${k}"><span class="ti">${ic(i)}</span><span class="tl">${l}</span></button>`).join("")}</nav>`;
   frameReady = true;
 }
 function animate(main, dir) {
@@ -290,9 +310,9 @@ async function renderHome(alive) {
     if (t) {
       wrap.innerHTML = `<h2 class="sectitle">آخرین کارنامه</h2>
         <button class="latest" data-act="rc-open" data-id="0">
-          <div><div class="num">${F(num(t.score))}</div><div class="of">از ${N(cardScale(last))}</div></div>
-          <div class="meta"><b>${esc(last.title)}</b><span class="hint">رتبه‌ی ${N(num(t.rank) == null ? "—" : num(t.rank))} · تراز ${N(num(t.std) == null ? "—" : num(t.std))}</span></div>
-          <span class="chev" style="transform:scaleX(-1);color:var(--muted)">${ic("chev")}</span></button>`;
+          <div class="ring" style="--p:${Math.min(100, Math.max(0, num(t.score) || 0) / cardScale(last) * 100).toFixed(1)}"><div><div class="num">${F(num(t.score))}</div><div class="of">از ${N(cardScale(last))}</div></div></div>
+          <div class="meta"><b>${esc(last.title)}</b><div class="chipline"><span class="mini">${ic("medal", "sm")}رتبه‌ی ${N(num(t.rank) == null ? "—" : num(t.rank))}</span><span class="mini">${ic("chart", "sm")}تراز ${N(num(t.std) == null ? "—" : num(t.std))}</span></div></div>
+          <span class="go">${ic("chev")}</span></button>`;
     } else wrap.innerHTML = "";
     if (items.length > 1) {
       const prev = await P(() => cardOf(items[1].url)); if (!alive()) return;
@@ -317,7 +337,7 @@ async function renderRC(alive) {
   let year = null, html = `<div class="pad" style="padding-bottom:0"><button class="btn block" data-act="an-start">${ic("chart")} تحلیل نمرات: مقایسه‌ی دو آزمون</button></div>`;
   items.forEach((r, i) => {
     if (r.year !== year) { year = r.year; html += `<h2 class="yeartitle">${esc(r.year)}</h2>`; }
-    html += `<button class="rc-item" data-act="rc-open" data-id="${i}"><span class="t">${esc(r.title)}</span><span class="chev" style="color:var(--muted);transform:scaleX(-1)">${ic("chev")}</span></button>`;
+    html += `<button class="rc-item" data-act="rc-open" data-id="${i}"><span class="ico">${ic("report")}</span><span class="t">${esc(r.title)}</span><span class="go">${ic("chev")}</span></button>`;
   });
   shell({ title: TITLES.rc, body: html });
 }
@@ -335,7 +355,7 @@ async function renderRCDetail(alive) {
     return `<div class="lesson"><div class="h"><b>${esc(l.name)}</b><span class="sc">${F(s)}</span></div>
       <div class="gauge" role="img" aria-label="${esc(l.name)}: ${F(s)} از ${N(sc)}"><i style="width:${Math.min(100, Math.max(0, s || 0) / sc * 100)}%"></i>${g != null ? `<u style="right:calc(${Math.min(100, Math.max(0, g) / sc * 100)}% - 1px)" title="میانگین گروه"></u>` : ""}</div>
       <div class="m">${l.rank ? `<span>رتبه ${N(num(l.rank))}</span>` : ""}${l.stdScore ? `<span>تراز ${N(num(l.stdScore))}</span>` : ""}${g != null ? `<span>میانگین گروه ${F(g)}</span>` : ""}
-      ${l.correct || l.wrong || l.blank ? `<span>✅ ${N(l.correct || 0)} ❌ ${N(l.wrong || 0)} ⚪ ${N(l.blank || 0)}</span>` : ""}</div></div>`;
+      ${l.correct || l.wrong || l.blank ? `<span class="cnt ok">${ic("check", "xs")}${N(l.correct || 0)}</span><span class="cnt no">${ic("xmark", "xs")}${N(l.wrong || 0)}</span><span class="cnt bl">${ic("minus", "xs")}${N(l.blank || 0)}</span>` : ""}</div></div>`;
   }).join("");
   shell({ title: "کارنامه", back: true, body: `
     <div class="lead">${esc(r.title)}</div>
@@ -351,31 +371,31 @@ async function renderAN(alive) {
   shell({ title: TITLES.an, back: true, body: loadingBody, loading: true });
   const items = await P(reportItems); if (!alive()) return;
   if (items.length < 2) return shell({ title: TITLES.an, back: true, body: '<div class="empty">برای تحلیل حداقل به دو کارنامه نیاز است.</div>' });
-  const pick = (act, skip) => items.map((r, i) => i === skip ? "" : `<button class="rc-item" data-act="${act}" data-id="${i}"><span class="t">${esc(r.title)}<small class="hint" style="display:block;font-weight:400">${esc(r.year)}</small></span><span class="chev" style="color:var(--muted);transform:scaleX(-1)">${ic("chev")}</span></button>`).join("");
+  const pick = (act, skip) => items.map((r, i) => i === skip ? "" : `<button class="rc-item" data-act="${act}" data-id="${i}"><span class="ico">${ic("report")}</span><span class="t">${esc(r.title)}<small class="hint" style="display:block;font-weight:400">${esc(r.year)}</small></span><span class="go">${ic("chev")}</span></button>`).join("");
   if (A.a == null) return shell({ title: TITLES.an, back: true, body: `<p class="lead">آزمون مدنظرت را انتخاب کن</p>${pick("an-a", -1)}` });
   if (A.b == null) return shell({ title: TITLES.an, back: true, body: `<div class="cmp-head"><div><small>آزمون اصلی</small><b>${esc(items[A.a].title)}</b></div></div><p class="lead">با کدام آزمون مقایسه کنم؟</p>${pick("an-b", A.a)}` });
   shell({ title: TITLES.an, back: true, body: loadingBody, loading: true });
   const ca = await P(() => cardOf(items[A.a].url)); if (!alive()) return;
   const cb = await P(() => cardOf(items[A.b].url)); if (!alive()) return;
   const c = compare(ca, cb), unit = c.scale === 100 ? "درصد" : "نمره";
-  const pill = (st, t) => `<span class="pill ${st}">${STATUS_TXT[st][0]} ${t}</span>`;
+  const pill = (st, t) => `<span class="pill ${st}">${ic({ up: "tup", down: "tdown", flat: "equal" }[st], "sm")}${t}</span>`;
   const dtxt = d => `${d > 0 ? "+" : ""}${F(d)} ${unit}`;
   const tot = c.totals.map(t => `<div class="stat"><div class="k">${esc(t.name)}</div><div class="v">${F(t.a)}</div>
     <div class="sub">مقایسه: ${F(t.b)}</div><div style="margin-top:4px">${pill(t.st, dtxt(t.d))}</div>
-    ${t.rank ? `<div class="sub" style="margin-top:4px">${t.rank.diff > 0 ? "⬆️" : t.rank.diff < 0 ? "⬇️" : "➖"} رتبه ${N(t.rank.a)} (${N(t.rank.b)})</div>` : ""}</div>`).join("");
+    ${t.rank ? `<div class="sub" style="margin-top:4px">${ic(t.rank.diff > 0 ? "aup" : t.rank.diff < 0 ? "adown" : "minus", "xs")} رتبه ${N(t.rank.a)} (${N(t.rank.b)})</div>` : ""}</div>`).join("");
   const rowsH = c.rows.map(r => `<div class="crow"><div class="top"><b>${esc(r.l.name)}</b>${pill(r.st, STATUS_TXT[r.st][1] + ": " + dtxt(r.d) + pctChange(r.a, r.b))}</div>
     <div class="vals"><span>اصلی <b style="color:var(--ink)">${F(r.a)}</b></span><span>مقایسه ${F(r.b)}</span>
-    ${r.rank ? `<span>🏅 رتبه ${N(r.rank.a)} (${N(r.rank.b)}) · ${r.rank.txt}</span>` : ""}
-    ${r.grp ? `<span>👥 ${{ above: "بالاتر از", below: "پایین‌تر از", same: "هم‌سطح" }[r.grp]} میانگین گروه (${F(r.ga)})</span>` : ""}
-    ${r.l.correct || r.l.wrong || r.l.blank ? `<span>✅ ${N(r.l.correct || 0)} ❌ ${N(r.l.wrong || 0)} ⚪ ${N(r.l.blank || 0)}</span>` : ""}</div></div>`).join("");
+    ${r.rank ? `<span>${ic("medal", "sm")}رتبه ${N(r.rank.a)} (${N(r.rank.b)}) · ${r.rank.txt}</span>` : ""}
+    ${r.grp ? `<span>${ic("users", "sm")}${{ above: "بالاتر از", below: "پایین‌تر از", same: "هم‌سطح" }[r.grp]} میانگین گروه (${F(r.ga)})</span>` : ""}
+    ${r.l.correct || r.l.wrong || r.l.blank ? `<span class="cnt ok">${ic("check", "xs")}${N(r.l.correct || 0)}</span><span class="cnt no">${ic("xmark", "xs")}${N(r.l.wrong || 0)}</span><span class="cnt bl">${ic("minus", "xs")}${N(r.l.blank || 0)}</span>` : ""}</div></div>`).join("");
   const adv = c.advice.map(p => typeof p === "string" ? `<p>${esc(p).replace(/\n/g, "<br>")}</p>` : `<p class="small">${esc(p.small)}</p>`).join("");
   shell({ title: TITLES.an, back: true, body: `
     <div class="cmp-head"><div><small>آزمون اصلی</small><b>${esc(c.aTitle)}</b></div><div><small>مقایسه با</small><b>${esc(c.bTitle)}</b></div></div>
-    ${c.note ? `<div class="note" style="margin:12px 16px 0">ℹ️ ${esc(c.note)}</div>` : ""}
+    ${c.note ? `<div class="note" style="margin:12px 16px 0">${ic("info", "sm")}<span>${esc(c.note)}</span></div>` : ""}
     ${c.totals.length ? `<h2 class="sectitle">وضعیت کلی</h2><div class="tile3">${tot}</div>` : ""}
     ${c.rows.length ? `<h2 class="sectitle">مقایسه‌ی درس‌ها</h2>${rowsH}
     <div class="counts">${pill("up", N(c.up.length) + " درس پیشرفت")} ${pill("flat", N(c.flat.length) + " درس ثابت")} ${pill("down", N(c.down.length) + " درس افت")}</div>` : '<div class="empty">این دو آزمون درس مشترکی ندارند.</div>'}
-    ${c.onlyA.length || c.onlyB.length ? `<p class="hint" style="padding:10px 16px 0">${c.onlyA.length ? "ℹ️ فقط در آزمون اصلی: " + esc(c.onlyA.join("، ")) + "<br>" : ""}${c.onlyB.length ? "ℹ️ فقط در آزمون مقایسه: " + esc(c.onlyB.join("، ")) : ""}</p>` : ""}
+    ${c.onlyA.length || c.onlyB.length ? `<p class="hint" style="padding:10px 16px 0">${c.onlyA.length ? "فقط در آزمون اصلی: " + esc(c.onlyA.join("، ")) + "<br>" : ""}${c.onlyB.length ? "فقط در آزمون مقایسه: " + esc(c.onlyB.join("، ")) : ""}</p>` : ""}
     <div class="coach"><div class="bubble">${adv}</div><img src="${IMG.mascot}" alt=""></div>
     <div class="actions"><button class="btn block" data-act="an-swap">${ic("chart")} مقایسه با آزمون دیگر</button><button class="btn ghost block" data-act="an-reset">انتخاب آزمون اصلیِ دیگر</button></div>` });
 }
@@ -389,9 +409,9 @@ async function renderSet() {
     <section class="profile">${avatar}<h2>${esc(u.name || "دانش‌آموز")}</h2><small>دانش‌آموز علوی</small></section>
     <div class="setgroup"><h3>ظاهر برنامه</h3>
       <div class="seg3" role="group" aria-label="حالت روز و شب">
-        <button data-act="theme" data-t="light" aria-pressed="${th === "light"}"><span class="em">☀️</span>روز</button>
-        <button data-act="theme" data-t="dark" aria-pressed="${th === "dark"}"><span class="em">🌙</span>شب</button>
-        <button data-act="theme" data-t="auto" aria-pressed="${th === "auto"}"><span class="em">📱</span>مثل گوشی</button>
+        <button data-act="theme" data-t="light" aria-pressed="${th === "light"}">${ic("sun")}روز</button>
+        <button data-act="theme" data-t="dark" aria-pressed="${th === "dark"}">${ic("moon")}شب</button>
+        <button data-act="theme" data-t="auto" aria-pressed="${th === "auto"}">${ic("phone")}مثل گوشی</button>
       </div></div>
     <div class="setgroup"><h3>کمک</h3>
       <button class="setbtn" data-act="support"><span class="ic">${ic("help")}</span><span style="flex:1">پشتیبانی<small>گفتگو با پشتیبان در بله</small></span></button></div>
@@ -422,13 +442,13 @@ async function doDownload(urls, el, label) {
 const shortClass = t => (t.split("؛").pop().trim() || t);
 const year4 = t => { const m = toEn(t).match(/\d{4}/); return m ? m[0] : t; };
 const monthLabel = t => { const m = toEn(t).trim().match(/^(.+?)\s+(\d{2})$/); return m ? `${m[1]} 14${m[2]}` : t; };
-const HW_ICON = { "فعالیت": "🌱", "تکلیف": "✏️" };
+const HW_ICON = { "فعالیت": "sprout", "تکلیف": "pencil" };
 function hwLessonsHtml(page) {
   if (!page.lessons.length) return '<div class="hint" style="padding:6px 0 10px">برای این روز فعالیت یا تکلیفی ثبت نشده.</div>';
-  return page.lessons.map(l => `<div class="ln"><b>${esc(l.name)}</b>${l.teacher ? `<p class="teacher">👤 ${esc(l.teacher)}</p>` : ""}
+  return page.lessons.map(l => `<div class="ln"><b>${esc(l.name)}</b>${l.teacher ? `<p class="teacher">${ic("user", "sm")}${esc(l.teacher)}</p>` : ""}
     ${l.items.map(it => it.text
-      ? `<div class="it"><span class="lab">${HW_ICON[it.label] || "📌"} ${esc(it.label)}</span><br>${esc(it.text)}</div>`
-      : `<div class="it"><span class="lab">📎 ${esc(it.label)}</span><br>${it.files.map((u, k) => `<button class="file" data-act="file" data-url="${esc(u)}">${ic("down")}<span>دریافت فایل${it.files.length > 1 ? " " + N(k + 1) : ""}</span></button>`).join("")}</div>`).join("")}</div>`).join("");
+      ? `<div class="it"><span class="lab">${ic(HW_ICON[it.label] || "pin", "sm")}${esc(it.label)}</span><br>${esc(it.text)}</div>`
+      : `<div class="it"><span class="lab">${ic("clip", "sm")}${esc(it.label)}</span><br>${it.files.map((u, k) => `<button class="file" data-act="file" data-url="${esc(u)}">${ic("down")}<span>دریافت فایل${it.files.length > 1 ? " " + N(k + 1) : ""}</span></button>`).join("")}</div>`).join("")}</div>`).join("");
 }
 async function renderHW(alive) {
   backFn = null; shell({ title: TITLES.hw, body: loadingBody, loading: true });
@@ -452,7 +472,7 @@ document.addEventListener("toggle", async e => {
   box.innerHTML = '<div class="inline-load"><span class="spin"></span>در حال دریافت…</div>';
   try {
     const page = await P(() => cached("hw-day:" + url, () => Portal.hwDay(url)));
-    box.innerHTML = (page.date ? `<div class="hint" style="padding:2px 0 6px">📅 ${esc(page.date)}</div>` : "") + hwLessonsHtml(page);
+    box.innerHTML = (page.date ? `<div class="dt">${ic("cal", "sm")}${esc(page.date)}</div>` : "") + hwLessonsHtml(page);
   } catch (err) {
     delete d.dataset.loaded;
     box.innerHTML = `<div class="err" style="margin:6px 0">${esc(errText(err, "دریافت نشد."))}</div><button class="btn ghost" data-act="hw-retry">دوباره تلاش کن</button>`;
@@ -469,9 +489,9 @@ async function renderTR(alive) {
   const cell = (cls, t) => t ? `<span class="tm"><i class="dot ${cls}"></i>${cls === "in" ? "ورود" : "خروج"} ${N(t)}</span>` : `<span class="tm miss"><i class="dot"></i>ثبت نشده</span>`;
   const multi = new Set(w.days.map(d => d.school)).size > 1;
   let last = null, rows = "";
-  if (!multi && w.days[0].school) rows += `<div class="crumb" style="padding-bottom:8px">🏫 ${esc(w.days[0].school)}</div>`;
+  if (!multi && w.days[0].school) rows += `<div class="crumb">${ic("school", "sm")}${esc(w.days[0].school)}</div>`;
   w.days.forEach(d => {
-    if (multi && d.school !== last) { rows += `<div class="crumb" style="padding-bottom:8px">🏫 ${esc(d.school)}</div>`; last = d.school; }
+    if (multi && d.school !== last) { rows += `<div class="crumb">${ic("school", "sm")}${esc(d.school)}</div>`; last = d.school; }
     rows += `<div class="tr-day"><div class="d">${esc(d.weekday)} <small>${N(d.date)}</small></div>${cell("in", d.entry)}${cell("out", d.exit)}</div>`;
   });
   shell({ title: TITLES.tr, body: `
